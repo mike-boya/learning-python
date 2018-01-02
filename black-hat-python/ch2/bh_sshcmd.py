@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
-import threading
 import paramiko
-import subprocess
+
 
 def ssh_command(ip, user, passwd, command):
     client = paramiko.SSHClient()
@@ -14,5 +13,6 @@ def ssh_command(ip, user, passwd, command):
         ssh_session.exec_command(command)
         print ssh_session.recv(1024)
     return
+
 
 ssh_command('192.168.34.22', 'root', 'toor', 'id')

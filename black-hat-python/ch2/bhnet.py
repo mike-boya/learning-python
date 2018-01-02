@@ -14,6 +14,7 @@ target = ""
 upload_destination = ""
 port = 0
 
+
 def usage():
     print "BHP Net Tool"
     print
@@ -31,11 +32,12 @@ def usage():
     print "echo 'ABCDEFGHI' | ./bhpnet.py -t 192.168.11.12 -p 135"
     sys.exit(0)
 
+
 def client_sender(buffer):
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         # connect to our target host
-        client.connect((target,port))
+        client.connect((target, port))
         if len(buffer):
             client.send(buffer)
         while True:
@@ -45,7 +47,7 @@ def client_sender(buffer):
             while recv_len:
                 data = client.recv(4096)
                 recv_len = len(data)
-                response+= data
+                response += data
                 if recv_len < 4096:
                     break
             print response,
@@ -59,6 +61,7 @@ def client_sender(buffer):
         print "[*] Exception! Exiting."
         # teardown the connection
         client.close()
+
 
 def client_handler(client_socket):
     global upload
@@ -79,7 +82,7 @@ def client_handler(client_socket):
 
         # now we take these bytes and try to write them out
         try:
-            file_descriptor = open(upload_destination,"wb")
+            file_descriptor = open(upload_destination, "wb")
             file_descriptor.write(file_buffer)
             file_descriptor.close()
             # acknowledge that we wrote the file out
@@ -104,6 +107,7 @@ def client_handler(client_socket):
                 response = run_command(cmd_buffer)
                 client_socket.send(response)
 
+
 def server_loop():
     global target
     # if no target is defined, listen on all interfaces
@@ -111,7 +115,7 @@ def server_loop():
         target = "0.0.0.0"
 
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.bind((target,port))
+    server.bind((target, port))
     server.listen(5)
 
     while True:
@@ -119,6 +123,7 @@ def server_loop():
         # spin off a thread to handle our new client
         client_thread = threading.Thread(target=client_handler,args=(client_socket,))
         client_thread.start()
+
 
 def run_command(command):
     # trim the newline
@@ -129,6 +134,7 @@ def run_command(command):
     except:
         output = "Failed to execute command.\r\n"
     return output
+
 
 def main():
     global listen
@@ -142,15 +148,16 @@ def main():
         usage()
     # read the commandline options
     try:
-        opts, args = getopt.getopt(sys.argv[1:],"hle:t:p:cu:",["help","listen","execute","target","port","command","upload"])
+        opts, args = getopt.getopt(sys.argv[1:], "hle:t:p:cu:", ["help", "listen", "execute", "target", "port",
+                                                                 "command", "upload"])
     except getopt.GetoptError as err:
         print str(err)
         usage()
 
     for o,a in opts:
-        if o in ("-h","--help"):
+        if o in ("-h", "--help"):
             usage()
-        elif o in ("-l","--listen"):
+        elif o in ("-l", "--listen"):
             listen = True
         elif o in ("-e", "--execute"):
             execute = a
@@ -163,7 +170,7 @@ def main():
         elif o in ("-p", "--port"):
             port = int(a)
         else:
-            assert False,"Unhandled Option"
+            assert False, "Unhandled Option"
     # are we going to listen or just send data from stdin?
     if not listen and len(target) and port > 0:
         # read in the buffer from the commandline
@@ -173,5 +180,6 @@ def main():
         client_sender(buffer)
     if listen:
         server_loop()
+
 
 main()

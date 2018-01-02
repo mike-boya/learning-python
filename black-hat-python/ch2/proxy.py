@@ -15,6 +15,7 @@ def hexdump(src, length=16):
        result.append(b"%04X   %-*s   %s" % (i, length*(digits + 1), hexa, text))
     print b'\n'.join(result)
 
+
 def server_loop(local_host, local_port, remote_host, remote_port, receive_first):
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
@@ -31,6 +32,7 @@ def server_loop(local_host, local_port, remote_host, remote_port, receive_first)
                 # start a thread to talk to the remote host
                 proxy_thread = threading.Thread(target=proxy_handler, args=(client_socket, remote_host, remote_port, receive_first))
                 proxy_thread.start()
+
 
 def proxy_handler(client_socket, remote_host, remote_port, receive_first):
         remote_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
