@@ -6,6 +6,7 @@ This repo was created to store the source code from Python programming books I'v
 * Violent Python - TJ O'Connor
 * Black Hat Python - Justin Seitz
 * Automate the Boring Stuff with Python - Al Sweigart
+* Cracking Codes with Python - Al Sweigart
 
 ## Disclaimers:
 * The Python version is dependent on the publication. If the book was written for Python 2.X I did not update the code to be compatible with Python 3.
